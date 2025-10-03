@@ -18,7 +18,8 @@
   let reasoning = $state(false);
 
   onMount(() => {
-    socket = io(PUBLIC_DEV === "true" ? "http://localhost:3000" : "wss://chat-jippity-server.onrender.com", { transports: ["websocket"] });
+    const url = PUBLIC_DEV === "true" ? "http://localhost:3000" : "wss://chat-jippity-server.onrender.com";
+    socket = io(url, { transports: ["websocket"] });
 
     socket.on("connect", () => {
       console.log("connected to server with id: ", socket.id);
@@ -52,7 +53,9 @@
     });
   });
 
-  function send() {
+  function send(e: SubmitEvent) {
+    e.preventDefault();
+
     if (message.length > 0) {
       socket.emit("send-message", { roomId, message, reasoning });
       messages.push({ bot: false, text: message });
@@ -118,7 +121,7 @@
         {/if}
 
         <div class="rounded-4xl bg-bg-1 px-6 py-4 w-[40rem]">
-          <form on:submit|preventDefault={send} class="flex flex-col gap-4 h-full">
+          <form onsubmit={send} class="flex flex-col gap-4 h-full">
             <input
               type="text"
               name="message"
@@ -132,7 +135,7 @@
             <div class="flex items-center justify-between">
               <button
                 type="button"
-                on:click={() => (reasoning = !reasoning)}
+                onclick={() => (reasoning = !reasoning)}
                 class="flex items-center gap-1 px-2.5 py-1.5 rounded-full cursor-pointer border-2 {reasoning ? "bg-accent text-accent-1 border-accent" : "border-border"}"
               >
                 <iconify-icon icon="mingcute:bulb-2-line" class="text-xl"></iconify-icon>

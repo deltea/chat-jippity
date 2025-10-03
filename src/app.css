@@ -14,6 +14,6 @@
   /* --font-sans: "Open Sans", sans-serif; */
 }
 
-body {
-  @apply bg-bg text-fg selection:bg-fg selection:text-bg;
-}
+  body {
+    @apply bg-bg text-fg selection:bg-fg selection:text-bg;
+  }
